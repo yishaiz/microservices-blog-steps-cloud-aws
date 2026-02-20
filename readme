@@ -1,0 +1,10 @@
+cd infra/aws
+
+npm install
+
+# probaly need to update the aws cli (cdk)
+npm install -g aws-cdk@latest
+
+npm run synth
+
+
