@@ -7,4 +7,14 @@ npm install -g aws-cdk@latest
 
 npm run synth
 
+cdk diff
 
+# if fails
+npx aws-cdk@latest synth
+
+
+-----
+
+npm run synth
+
+npm run diff
