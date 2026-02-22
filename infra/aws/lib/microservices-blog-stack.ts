@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import { Construct } from 'constructs';
 import { VpcConstruct } from './vpc-stack';
+import { EksConstruct } from './eks-construct';
 
 export class MicroservicesBlogStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -29,7 +30,6 @@ export class MicroservicesBlogStack extends cdk.Stack {
       });
     });
 
-    // Optional: outputs for convenience
     Object.entries(ecrRepos).forEach(([service, repo]) => {
       new cdk.CfnOutput(this, `EcrRepoUri${toPascalCase(service)}`, {
         value: repo.repositoryUri,
@@ -37,7 +37,12 @@ export class MicroservicesBlogStack extends cdk.Stack {
       });
     });
 
-    // TODO: Phase 4 - EKS Cluster (will reference vpc.vpc, vpc.eksNodeSecurityGroup)
+    // Phase 4: EKS cluster + node group
+    const eksConstruct = new EksConstruct(this, 'Eks', { vpc });
+    new cdk.CfnOutput(this, 'EksClusterName', {
+      value: eksConstruct.cluster.clusterName,
+      description: 'EKS cluster name (use: aws eks update-kubeconfig --name <value>)',
+    });
   }
 }
 
