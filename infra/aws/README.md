@@ -63,6 +63,23 @@ This directory contains the AWS CDK infrastructure code for deploying the micros
 
 **Web access from outside:** Not yet. To get HTTP from the internet we still need to: deploy app images to ECR, apply K8s manifests, and set up ALB Ingress (next steps).
 
+### If deploy fails: "ECR Repository ... already exists"
+
+This happens when you deleted the CloudFormation stack but ECR repos were left behind (they are not deleted by default). Fix: delete the orphaned repos, then deploy again.
+
+From project root (set `REGION` if needed):
+
+- **Mac/Linux:** `./scripts/delete-ecr-repos.sh us-east-1`
+- **Windows PowerShell:** `.\scripts\delete-ecr-repos.ps1 -Region us-east-1`
+
+Or manually:
+```bash
+for r in client posts comments query moderation event-bus; do
+  aws ecr delete-repository --repository-name "microservices-blog/$r" --region us-east-1 --force
+done
+```
+Then: `cd infra/aws && npm run deploy`.
+
 ## Current Status
 
 **Phases 1–4 complete**: CDK project, VPC, ECR, EKS + node group

@@ -22,3 +22,23 @@ npm run diff
 cd infra/aws
 npm run synth
 npm run diff
+
+===============
+
+# fix conflict
+
+# מהשורש של הפרויקט, החלף us-east-1 ב-region שלך אם צריך
+chmod +x scripts/delete-ecr-repos.sh
+./scripts/delete-ecr-repos.sh us-east-1
+
+# for windows:
+.\scripts\delete-ecr-repos.ps1 -Region us-east-1
+
+
+# OR
+aws ecr delete-repository --repository-name microservices-blog/client   --region us-east-1 --force
+aws ecr delete-repository --repository-name microservices-blog/posts    --region us-east-1 --force
+aws ecr delete-repository --repository-name microservices-blog/comments --region us-east-1 --force
+aws ecr delete-repository --repository-name microservices-blog/query    --region us-east-1 --force
+aws ecr delete-repository --repository-name microservices-blog/moderation --region us-east-1 --force
+aws ecr delete-repository --repository-name microservices-blog/event-bus --region us-east-1 --force
