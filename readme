@@ -18,3 +18,7 @@ npx aws-cdk@latest synth
 npm run synth
 
 npm run diff
+
+cd infra/aws
+npm run synth
+npm run diff
