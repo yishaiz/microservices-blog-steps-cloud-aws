@@ -8,9 +8,11 @@
     "watch": "tsc -w",
     "cdk": "cdk",
     "deploy": "cdk deploy --all",
+    "deployכ": "cdk deploy --all -f --verbose",
     "synth": "cdk synth",
     "diff": "cdk diff",
-    "destroy": "cdk destroy --all"
+    "destroy": "cdk destroy --all",
+    "destroyf": "cdk destroy --all -f --verbose"
   },
   "keywords": [],
   "author": "",

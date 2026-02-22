@@ -80,6 +80,42 @@ done
 ```
 Then: `cd infra/aws && npm run deploy`.
 
+## Deploy/delete timing and how to see progress
+
+- **Deploy:** Creating VPC + EKS + node group usually takes **about 10–20 minutes**. The slow part is the EKS control plane and then the node group. So 10 minutes can be normal; it often looks “stuck” while EKS is provisioning.
+- **Delete:** Tearing down the same stack often takes **15–25+ minutes** (draining nodes, deleting EKS control plane, etc.). That can also look stuck.
+- **Machine size (t3.medium):** Does not affect how long the stack is created; the delay is mostly AWS creating the EKS control plane and nodes. Medium is fine for this app.
+
+### See that something is moving
+
+1. **CDK with more output** (from `infra/aws`):
+   ```bash
+   npx cdk deploy --all --verbose
+   ```
+   Or:
+   ```bash
+   npx cdk deploy --all --debug
+   ```
+   You’ll see more logs; the actual resource creation is done by CloudFormation.
+
+2. **CloudFormation events (best way to see progress)**  
+   In AWS Console: **CloudFormation → Stacks → your stack (e.g. MicroservicesBlogStack) → Events**.  
+   New events appear every 1–2 minutes while resources are being created or deleted.
+
+3. **Same from CLI** (replace region/stack name if needed):
+   ```bash
+   aws cloudformation describe-stack-events --stack-name MicroservicesBlogStack --region us-east-1 --query 'StackEvents[*].[Timestamp,ResourceStatus,ResourceType,LogicalResourceId]' --output table
+   ```
+   Run every few minutes to see new lines.
+
+4. **Check stack status**:
+   ```bash
+   aws cloudformation describe-stacks --stack-name MicroservicesBlogStack --region us-east-1 --query 'Stacks[0].StackStatus'
+   ```
+   During deploy you’ll see `CREATE_IN_PROGRESS`; when done, `CREATE_COMPLETE`. During delete, `DELETE_IN_PROGRESS` then the stack disappears.
+
+If something actually failed (e.g. org policy, quota), it will show in CloudFormation Events as `CREATE_FAILED` or `DELETE_FAILED` with a reason.
+
 ## Current Status
 
 **Phases 1–4 complete**: CDK project, VPC, ECR, EKS + node group
