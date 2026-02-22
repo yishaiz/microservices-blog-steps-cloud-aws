@@ -32,6 +32,11 @@ export class EksConstruct extends Construct {
       maxSize: 4,
       subnets: { subnets: props.vpc.vpc.privateSubnets },
     });
+
+    // Phase 5: AWS Load Balancer Controller (for ALB Ingress)
+    new eks.AlbController(this, 'AlbController', {
+      cluster: this.cluster,
+    });
   }
 }
 
