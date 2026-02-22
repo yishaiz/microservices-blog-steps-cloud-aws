@@ -36,6 +36,7 @@ export class EksConstruct extends Construct {
     // Phase 5: AWS Load Balancer Controller (for ALB Ingress)
     new eks.AlbController(this, 'AlbController', {
       cluster: this.cluster,
+      version: eks.AlbControllerVersion.V2_8_2,
     });
   }
 }
