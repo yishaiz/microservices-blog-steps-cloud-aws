@@ -42,3 +42,7 @@ aws ecr delete-repository --repository-name microservices-blog/comments --region
 aws ecr delete-repository --repository-name microservices-blog/query    --region us-east-1 --force
 aws ecr delete-repository --repository-name microservices-blog/moderation --region us-east-1 --force
 aws ecr delete-repository --repository-name microservices-blog/event-bus --region us-east-1 --force
+
+
+
+  aws cloudformation describe-stack-events --stack-name MicroservicesBlogStack --region us-east-1 --query 'StackEvents[*].[Timestamp,ResourceStatus,ResourceType,LogicalResourceId]' --output table

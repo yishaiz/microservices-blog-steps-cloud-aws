@@ -2,6 +2,8 @@
 
 This directory contains the AWS CDK infrastructure code for deploying the microservices blog to AWS.
 
+**Full flow (from scratch + when to re-run what):** see **[DEPLOY-AWS.md](../../DEPLOY-AWS.md)** in the repo root.
+
 ## Prerequisites
 
 - Node.js v18 or higher
